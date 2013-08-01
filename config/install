@@ -1,0 +1,10 @@
+--Created by LNETeam from LNET Technologies--
+--     License Info Included at GitHub     --
+
+if not fs.isDir(".cyscboot/config") then
+    fs.makeDir(".cyscboot/config") 
+end
+
+if not fs.exists(".cyscboot/config/.pkgConfig") then
+     
+end

@@ -1,0 +1,10 @@
+local pkgName = ""
+local pkgAuthor = ""
+local pkgCompany = ""
+local pkgVersion = ""
+local pkgFiles = {
+    demoFile = {file_path="demo_FilePath",install_Path=""},
+}
+local bootBGCol = colors.white
+local bootLoadBarCol = colors.white
+local bootTextCol = colors.white

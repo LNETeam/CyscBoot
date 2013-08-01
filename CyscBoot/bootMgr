@@ -1,0 +1,148 @@
+--Created by LNETeam from LNET Technologies--
+--     License Info Included at GitHub     --
+
+
+--Local Variables
+local colorMode = true
+local bgCol = 256
+local foreCol = 2048
+local textCol = 128
+local loadBarBG = colors.white
+local textBGBoxCol = colors.white
+local contex = 0
+local mx,my = term.getSize()
+
+local function setup()
+    shell.setDir("")
+    if not fs.exists(".cyscboot/config/.pkgConfig") then
+        error("errnpkg")
+    else
+        shell.run(".cyscboot/config/.pkgConfig") 
+    end
+    if not term.isColor() then
+        colorMode = false 
+    end
+end
+
+local function showError(errTxt)
+   term.setBackgroundColor(256)
+   term.clear()
+   term.setBackgroundColor(128)
+   term.setCursorPos(1, 1)
+   term.clearLine()
+   term.setTextColor(colors.red)
+   term.setCursorPos(1,1)
+   print("Exception caught at: "..shell.getRunningProgram()..", "..os.time())
+   term.setBackgroundColor(128)
+   term.setCursorPos(mx/2-13,my/2-2)
+   print("                          ")
+   term.setCursorPos(mx/2-13,my/2-1)
+   print("                          ")
+   term.setCursorPos(mx/2-13,my/2)
+   print("                          ")
+   term.setCursorPos(mx/2-13,my/2+1)
+   print("                          ")
+   term.setCursorPos(mx/2-13,my/2+2)
+   print("                          ")
+   term.setCursorPos(mx/2-13,my/2-1)
+   print("          Error:          ")
+   term.setCursorPos(mx/2-13,my/2+1)
+   print(" " .. errTxt)
+   term.setBackgroundColor(128)
+   term.setCursorPos(1,my)
+   term.clearLine()
+   os.pullEvent('key')
+   if not fs.isDir(".cyscboot/logs") then
+       	fs.makeDir(".cyscboot/logs")
+   end
+   local file = io.open(".cyscboot/logs/bootErrorLog","a")
+   local err = [[
+
+=============================
+===========ERROR=============
+No .pkgConfig found Exception
+
+=============================
+]]
+   file:write(err)
+   file:close()
+   os.reboot()
+end
+
+local stat,err = pcall(setup)
+if stat == false then
+    --showError("No .pkgConfig file found!")
+end
+
+local function runStartup()
+	i = 0
+	if shell.run(".cyscboot/config/.pkgConfig") then
+		i = i+1
+	end
+	for k,v in pairs(pkgFile) do
+		if fs.exists(v.file_path) then
+			i = i+1
+		else
+
+		end
+	end
+end
+
+local function drawConfirmMenu()
+	term.setTextColor(textCol)
+	term.setBackgroundColor(textBGBoxCol)
+	term.setCursorPos(mx/2-10,my/2-7)
+	print("      Confirm?       ")
+	term.setCursorPos(mx/2-10,my/2-6)
+	print("                     ")
+	term.setCursorPos(mx/2-10,my/2-5)
+	print("[Yes]            [No]")
+
+
+end
+
+local function drawInstall()
+	term.setBackgroundColor(bgCol)
+	term.setTextColor(textCol)
+	term.clear()
+	term.setBackgroundColor(foreCol)
+	term.setCursorPos(1,1)
+	term.clearLine()
+	term.setCursorPos(1,1)
+	term.setTextColor(colors.white)
+	print("Status: Running...")
+	term.setTextColor(textCol)
+	term.setCursorPos(1,my)
+	term.clearLine()
+	term.setBackgroundColor(textBGBoxCol)
+	term.setCursorPos(mx/2-string.len(" CyscBoot Program Installer ")/2,my/2-1)
+	print(" CyscBoot Program Installer ")
+	term.setCursorPos(mx/2-string.len(" CyscBoot Program Installer ")/2,my/2)
+	print("                            ")
+	term.setCursorPos(mx/2-string.len(" CyscBoot Program Installer ")/2,my/2+1)
+	print("[Install]           [Cancel]")
+end
+
+local function drawStartup()
+	term.setBackgroundColor(bgCol)
+	term.clear()
+	term.setBackgroundColor(textCol)
+	term.setCursorPos(1,1)
+	term.clearLine()
+	term.setCursorPos(1,my)
+	term.clearLine()
+	term.setBackgroundColor(bgCol)
+	term.setTextColor(textCol)
+	term.setCursorPos(mx/2-string.len("Initializing Installer...")/2,my/2-2)
+	textutils.slowPrint(" Initializing Installer...")
+	term.setBackgroundColor(loadBarBG)
+	term.setCursorPos(mx/2-20,my/2+1)
+	print("                                         ")
+	term.setBackgroundColor(textCol)
+	term.setCursorPos(mx/2-20,my/2+1)
+	textutils.slowPrint("                                         ")
+	drawInstall()
+end
+
+
+drawStartup()

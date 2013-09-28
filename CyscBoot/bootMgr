@@ -71,7 +71,7 @@ end
 
 local stat,err = pcall(setup)
 if stat == false then
-    --showError("No .pkgConfig file found!")
+    showError("No .pkgConfig file found!")
 end
 
 local function runStartup()
@@ -85,7 +85,8 @@ local function runStartup()
 		else
 
 		end
-	end
+    end
+    return i
 end
 
 local function drawConfirmMenu()
@@ -144,5 +145,9 @@ local function drawStartup()
 	drawInstall()
 end
 
+local function installPkg()
+    local nums = runStartup()
+    
+end
 
 drawStartup()
